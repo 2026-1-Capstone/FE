@@ -1,0 +1,31 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
+
+:root {
+  --mainfont: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+
+  --blue1:#003366;
+  --blue2:#003366;
+  --blue3:#003366;
+  --blue4:#007FFF;
+  --blue5:#399CFF;
+  --blue6:#73B8FF;
+  --blue7:#ACD5FF;
+  --blue8:#E5F2FF;
+
+  --white: #FFFFFF;
+  --black: #121212;
+  --none: #00000000;
+
+  // 폰트 세팅
+  color: var(--black);
+  font-family: var(--mainfont);
+  font-size: 16px;
+  font-weight: 400;
+
+  // 폰트 최적화
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
