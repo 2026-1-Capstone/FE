@@ -37,21 +37,21 @@ const Download = () => {
         <din className="download-content">
           <div className="preview_div">
             <div className="preview_text">
-              <img src={check} className='check' />
+              <img src={check} className='check'alt="Check" />
               <div className="title">블러 처리된 영상이 준비되었습니다!</div>
             </div>
             <div className="video"></div>
           </div>
           <div className="info_div">
             <div className="safe_info_div">
-              <img src={safe} className="safe" />
+              <img src={safe} className="safe" alt="Safe" />
               <div className="safe_text">
                 <div className="safe_title">개인정보 보호 완료</div>
                 <div className="safe_txt">타인의 개인정보가 안전하게 블러 처리되었습니다.</div>
               </div>
             </div>
             <div className="tip_div">
-              <img src={tip} className="tip" />
+              <img src={tip} className="tip" alt="Tip" />
               <div className="tip_text">
                 <div className="tip_title">Tip</div>
                 <div className="tip_txt">
