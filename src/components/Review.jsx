@@ -70,7 +70,7 @@ const Review = () => {
             <div className="preview_text">
               <div className="title">결과 미리보기</div>
               <div className="preview_done">
-                <img src={check} className='check' />
+                <img src={check} className='check' alt="Check" />
                 <div className="done_text">블러 처리가 성공적으로 완료되었습니다.</div>
               </div>
             </div>
