@@ -155,6 +155,12 @@ const Register = () => {
 };
 
 const FaceCard = ({ title, selected, face, onNameChange, onDelete }) => {
+  const [isToggleOn, setIsToggleOn] = useState(false);
+
+  const handleToggle = () => {
+    setIsToggleOn(!isToggleOn);
+  };
+
   return (
     <div className="face-card">
       <button className="close-btn" onClick={() => onDelete(face.id)}>
@@ -177,6 +183,24 @@ const FaceCard = ({ title, selected, face, onNameChange, onDelete }) => {
       />
 
       <p>예) 나, 친구A</p>
+
+      <div className="toggle-wrapper">
+        <span>이모지</span>
+
+        <div
+          className={`toggle-container ${
+            isToggleOn ? 'toggle--checked' : ''
+          }`}
+          onClick={handleToggle}
+        >
+          <div
+            className={`toggle-circle ${
+              isToggleOn ? 'toggle--checked' : ''
+            }`}
+          />
+        </div>
+      </div>
+
     </div>
   );
 };
