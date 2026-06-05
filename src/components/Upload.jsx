@@ -1,17 +1,21 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Cloud from "../assets/img/cloud_upload.png";
-import load from "../assets/img/upload.png";
+import Cloud from "../assets/img/Cloud.svg";
+import load from "../assets/img/load.svg";
 
 const Upload = () => {
     const navigate = useNavigate();
 
     const handleVideoUpload = (e) => {
+        console.log("업로드 실행");
+        
         const file = e.target.files[0];
 
         if (!file) return;
 
         const maxSize = 4 * 1024 * 1024 * 1024;
+
+        console.log("파일 크기:", file.size);
 
         if (file.size > maxSize) {
             alert("최대 4GB까지 업로드할 수 있습니다.");
@@ -45,42 +49,45 @@ const Upload = () => {
     return (
         <div className="upload-page">
             <div className="upload-container">
-                <h1 className="page-title">동영상 업로드</h1>
+                <div className="upload-top">
+                    <h1 className="page-title">동영상 업로드</h1>
 
-                <div className="stepper">
-                    <div className="step active">
-                        <div className="circle">1</div>
-                        <span>동영상 업로드</span>
-                    </div>
+                    <div className="stepper">
+                        <div className="step active">
+                            <div className="circle">1</div>
+                            <span>동영상 업로드</span>
+                        </div>
 
-                    <div className="line"></div>
+                        <div className="line"></div>
 
-                    <div className="step">
-                        <div className="circle">2</div>
-                        <span>본인 얼굴 등록</span>
-                    </div>
+                        <div className="step">
+                            <div className="circle">2</div>
+                            <span>본인 얼굴 등록</span>
+                        </div>
 
-                    <div className="line"></div>
+                        <div className="line"></div>
 
-                    <div className="step">
-                        <div className="circle">3</div>
-                        <span>동영상 생성</span>
-                    </div>
+                        <div className="step">
+                            <div className="circle">3</div>
+                            <span>동영상 생성</span>
+                        </div>
 
-                    <div className="line"></div>
+                        <div className="line"></div>
 
-                    <div className="step">
-                        <div className="circle">4</div>
-                        <span>동영상 검수</span>
-                    </div>
+                        <div className="step">
+                            <div className="circle">4</div>
+                            <span>동영상 검수</span>
+                        </div>
 
-                    <div className="line"></div>
+                        <div className="line"></div>
 
-                    <div className="step">
-                        <div className="circle">5</div>
-                        <span>동영상 다운로드</span>
+                        <div className="step">
+                            <div className="circle">5</div>
+                            <span>동영상 다운로드</span>
+                        </div>
                     </div>
                 </div>
+
 
                 <div className="upload-card">
                     <img src={Cloud} className="img-cloud" alt="Cloud" />

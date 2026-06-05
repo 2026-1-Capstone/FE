@@ -99,7 +99,7 @@ const Review = () => {
               </div>
               <div className="info_normal_div">
                 <div className="info_title">블러 범위</div>
-                <div className="info_text">{isGenerating?.blurTarget=== "face" ? "모든 얼굴" : "등록 인물 제외"}</div>
+                <div className="info_text">{isGenerating?.blurTarget === "face" ? "모든 얼굴" : "등록 인물 제외"}</div>
               </div>
               <div className="info_normal_div">
                 <div className="info_title">처리 방식</div>
@@ -112,11 +112,12 @@ const Review = () => {
             </div>
           </div>
         </din>
+        <div className="bottom_btn_div">
+          <button className="retry" onClick={handleReturn}>다시 생성하기</button>
+          <button className="next" onClick={handleNext}>다음</button>
+        </div>
       </div>
-      <div className="bottom_btn_div">
-        <button className="retry" onClick={handleReturn}>다시 생성하기</button>
-        <button className="next" onClick={handleNext}>다음</button>
-      </div>
+
     </div>
   )
 }

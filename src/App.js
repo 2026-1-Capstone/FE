@@ -14,6 +14,7 @@ function App() {
       <Router>
         <Nav />
         <Routes>
+          <Route path="/" element={<Upload />} />
           <Route path="/upload" element={<Upload />} />
           <Route path="/register" element={<Register />} />
           <Route path="/generate" element={<Generate />} />

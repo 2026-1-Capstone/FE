@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import PeopleIcon from "../assets/img/PeopleIcon1.png";
-import NonePeopleIcon from "../assets/img/icon2.png";
-import BlurIcon from "../assets/img/icon3.png";
-import EmoIcon from "../assets/img/icon4.png";
+import PeopleIcon from "../assets/img/PeopleIcon.svg";
+import NonePeopleIcon from "../assets/img/NonePeopleIcon.svg";
+import BlurIcon from "../assets/img/BlurIcon.svg";
+import EmoIcon from "../assets/img/EmoIcon.svg";
 
 const Generate = () => {
     const navigate = useNavigate();
