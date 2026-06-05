@@ -1,0 +1,142 @@
+.download-page {
+    min-height: calc(100vh - 80px);
+    background: #fff;
+    padding: 50px 0 0;
+}
+
+.download-container {
+    width: 1200px;
+    margin: 0 auto;
+}
+
+.download-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    h1 {
+        font-size: 32px;
+        margin-bottom: 12px;
+    }
+
+    p {
+        color: #888;
+        line-height: 1.4;
+        font-size: 14px;
+    }
+}
+
+.download-content {
+    margin-top: 65px;
+    display: flex;
+    justify-content: center;
+    gap: 38px;
+
+    .title {
+        font-size: 16px;
+        color: #000;
+        font-weight: bold;
+    }
+
+    .preview_div {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        border: 1px solid #d0d0d0;
+        border-radius: 8px;
+        padding: 32px 40px;
+        gap: 15px;
+
+        .preview_text {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .check {
+            width: 30px;
+            height: 30px;
+        }
+
+        .video {
+            width: 600px;
+            height: 300px;
+            background-color: #888;
+        }
+    }
+
+    .info_div {
+        width: 600px;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+
+        .safe_info_div{
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background-color: rgba(#14AE5C, 0.1);
+            border-radius: 10px;
+            .safe{
+                width: 27.5px;
+                height: 30px;
+            }
+            .safe_title{
+                font-size: 18px;
+                font-weight: bold;
+                color: #14AE5C;
+                margin-bottom: 8px;
+            }
+            .safe_txt{
+                font-size: 16px;
+                color: #888888;
+            }
+        }
+        .tip_div{
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px 0 20px 20px;
+            background-color: #E5F2FF;
+            border-radius: 10px;
+            .tip{
+                width: 30px;
+                height: 30px;
+            }
+            .tip_title{
+                font-size: 18px;
+                font-weight: bold;
+                color: #000;
+                margin-bottom: 5px;
+            }
+            .tip_txt{
+                font-size: 16px;
+                color: #888888;
+            }
+        }
+    }
+}
+
+.download_bottom_btn {
+    display: flex;
+    justify-content: flex-end;
+    margin: 71px 0 0 0;
+
+    .download {
+        width: 170px;
+        height: 46px;
+        font-size: 16px;
+        font-weight: bold;
+        background: #0d83ff;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+}
