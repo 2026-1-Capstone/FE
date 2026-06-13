@@ -1,9 +1,16 @@
-import React from 'react'
-import check from '../assets/img/check.svg'
-import safe from '../assets/img/safe.svg'
-import tip from '../assets/img/tip.svg'
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import check from '../assets/img/check.svg';
+import safe from '../assets/img/safe.svg';
+import tip from '../assets/img/tip.svg';
+
+const BACKEND_BASE_URL = "https://nonwoody-winnie-excitably.ngrok-free.dev";
 
 const Download = () => {
+  const navigate = useNavigate();
+
+  const [videoUrl, setVideoUrl] = useState("");
+
   const steps = [
     "동영상 업로드",
     "본인 얼굴 등록",
@@ -11,6 +18,35 @@ const Download = () => {
     "동영상 검수",
     "동영상 다운로드",
   ];
+
+  useEffect(() => {
+    const videoId = localStorage.getItem("current_video_id");
+    const savedVideoInfo = localStorage.getItem("videoInfo");
+
+    if (!savedVideoInfo) {
+      navigate("/upload");
+      return;
+    }
+
+    if (videoId) {
+      setVideoUrl(`${BACKEND_BASE_URL}/api/blur/download/${videoId}`);
+    }
+  }, [navigate]);
+
+  const handleDownloadClick = () => {
+    if (!videoUrl) {
+      alert("다운로드할 영상 주소가 존재하지 않습니다.");
+      return;
+    }
+
+    const a = document.createElement("a");
+    a.href = videoUrl;
+    a.download = `blurred_video_${Date.now()}.mp4`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
   return (
     <div className='download-page'>
       <div className="download-container">
@@ -34,14 +70,27 @@ const Download = () => {
             ))}
           </div>
         </div>
-        <din className="download-content">
+
+        <div className="download-content">
           <div className="preview_div">
             <div className="preview_text">
-              <img src={check} className='check'alt="Check" />
+              <img src={check} className='check' alt="Check" />
               <div className="title">블러 처리된 영상이 준비되었습니다!</div>
             </div>
-            <div className="video"></div>
+
+            <div className="video">
+              {videoUrl ? (
+                <video 
+                  src={videoUrl} 
+                  controls 
+                  style={{ width: "100%", height: "100%", objectFit: "contain", borderRadius: "12px" }}
+                />
+              ) : (
+                <div className="video-placeholder">영상을 로드하는 중입니다...</div>
+              )}
+            </div>
           </div>
+          
           <div className="info_div">
             <div className="safe_info_div">
               <img src={safe} className="safe" alt="Safe" />
@@ -62,14 +111,16 @@ const Download = () => {
               </div>
             </div>
           </div>
-        </din>
+        </div>
+        
         <div className="download_bottom_btn">
-          <button className="download">동영상 다운로드</button>
+          <button className="download" onClick={handleDownloadClick}>
+            동영상 다운로드
+          </button>
         </div>
       </div>
-
     </div>
-  )
-}
+  );
+};
 
-export default Download
+export default Download;

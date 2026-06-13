@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 import PeopleIcon from "../assets/img/PeopleIcon.svg";
 import NonePeopleIcon from "../assets/img/NonePeopleIcon.svg";
 import BlurIcon from "../assets/img/BlurIcon.svg";
 import EmoIcon from "../assets/img/EmoIcon.svg";
+
+const BACKEND_BASE_URL = "https://nonwoody-winnie-excitably.ngrok-free.dev";
 
 const Generate = () => {
     const navigate = useNavigate();
@@ -40,6 +43,63 @@ const Generate = () => {
         }
     }, [navigate]);
 
+    useEffect(() => {
+        let statusInterval = null;
+
+        if (isGenerating) {
+            const videoId = localStorage.getItem("current_video_id");
+            if (!videoId) {
+                alert("영상 작업 ID를 찾을 수 없습니다. 처음부터 다시 시도해 주세요.");
+                setIsGenerating(false);
+                navigate("/upload");
+                return;
+            }
+
+            statusInterval = setInterval(async () => {
+                try {
+                    const response = await axios.get(`${BACKEND_BASE_URL}/api/blur/status/${videoId}`, {
+                        headers: { "ngrok-skip-browser-warning": "69420" }
+                    });
+                    
+                    console.log("===[백엔드 수신 데이터 데이터] ===", response.data);
+
+                    let currentStatus = "";
+                    if (response && response.data) {
+                        if (typeof response.data === "string") {
+                            currentStatus = response.data;
+                        } else if (response.data.status) {
+                            currentStatus = response.data.status;
+                        }
+                    }
+
+                    console.log("최종 추출된 AI 연산 상태:", currentStatus);
+
+                    const upperStatus = currentStatus?.toUpperCase()?.trim();
+
+                    if (upperStatus === "COMPLETED" || upperStatus === "SUCCESS") {
+                        console.log("🎉 완료 감지 성공! 인터벌을 종료하고 검수 페이지로 점프합니다.");
+                        clearInterval(statusInterval);
+                        setIsGenerating(false);
+                        navigate("/review"); 
+                    } else if (upperStatus === "FAILED" || upperStatus === "ERROR") {
+                        clearInterval(statusInterval);
+                        setIsGenerating(false);
+                        alert("AI 처리 중 서버 에러가 발생했습니다.");
+                    }
+                } catch (error) {
+                    console.error("서버 상태 체크 에러:", error);
+                    clearInterval(statusInterval);
+                    setIsGenerating(false);
+                    alert("서버 연결이 원활하지 않습니다.");
+                }
+            }, 3000);
+        }
+
+        return () => {
+            if (statusInterval) clearInterval(statusInterval);
+        };
+    }, [isGenerating, navigate]);
+
     const handlePrev = () => {
         navigate("/register");
     };
@@ -55,12 +115,6 @@ const Generate = () => {
         };
 
         localStorage.setItem("generateSetting", JSON.stringify(generateSetting));
-
-        // 나중에 백엔드 API 연결 시 이 부분을 API 요청으로 바꾸면 됨
-        setTimeout(() => {
-            setIsGenerating(false);
-            navigate("/review");
-        }, 2000);
     };
 
     return (
@@ -90,7 +144,7 @@ const Generate = () => {
                 </div>
 
                 <div className="generate-content">
-                    <div className="setting-card">
+                    <div className={`setting-card ${isGenerating ? "processing-blur" : ""}`}>
                         <h3>설정 옵션</h3>
 
                         <div className="setting-section">
@@ -102,7 +156,7 @@ const Generate = () => {
                                     active={blurTarget === "face"}
                                     title="모든 얼굴"
                                     desc="영상 속의 모든 얼굴을 자동으로 처리합니다."
-                                    onClick={() => setBlurTarget("face")}
+                                    onClick={() => !isGenerating && setBlurTarget("face")}
                                 />
 
                                 <OptionCard
@@ -110,7 +164,7 @@ const Generate = () => {
                                     active={blurTarget === "except"}
                                     title="선택 인물 제외"
                                     desc="등록된 인물을 제외하고 처리합니다."
-                                    onClick={() => setBlurTarget("except")}
+                                    onClick={() => !isGenerating && setBlurTarget("except")}
                                 />
                             </div>
                         </div>
@@ -124,7 +178,7 @@ const Generate = () => {
                                     active={processType === "mosaic"}
                                     title="블러"
                                     desc="흐림 처리로 인물을 가립니다."
-                                    onClick={() => setProcessType("mosaic")}
+                                    onClick={() => !isGenerating && setProcessType("mosaic")}
                                 />
 
                                 <OptionCard
@@ -132,7 +186,7 @@ const Generate = () => {
                                     active={processType === "blur"}
                                     title="이모지"
                                     desc="이모지로 인물을 가립니다."
-                                    onClick={() => setProcessType("blur")}
+                                    onClick={() => !isGenerating && setProcessType("blur")}
                                 />
                             </div>
                         </div>

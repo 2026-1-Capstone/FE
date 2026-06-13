@@ -40,6 +40,8 @@ const Upload = () => {
 
             localStorage.setItem("videoInfo", JSON.stringify(videoInfo));
 
+            window.uploadedVideoFile = file;
+
             navigate("/register");
         };
 

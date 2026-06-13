@@ -1,7 +1,10 @@
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios"; 
 import PlusIcon from "../assets/img/plus.png";
 import CloseIcon from "../assets/img/del.png";
+
+const BACKEND_BASE_URL = "https://nonwoody-winnie-excitably.ngrok-free.dev";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -14,7 +17,6 @@ const Register = () => {
       alert("최대 3명까지 등록할 수 있습니다.");
       return;
     }
-
     fileInputRef.current.click();
   };
 
@@ -26,7 +28,8 @@ const Register = () => {
       id: Date.now(),
       name: "",
       image: URL.createObjectURL(file),
-      file,
+      file, 
+      action: "no_blur",
     };
 
     setFaces([...faces, newFace]);
@@ -37,6 +40,14 @@ const Register = () => {
     setFaces(
       faces.map((face) =>
         face.id === id ? { ...face, name: value } : face
+      )
+    );
+  };
+
+  const handleActionToggle = (id, isEmojiOn) => {
+    setFaces(
+      faces.map((face) =>
+        face.id === id ? { ...face, action: isEmojiOn ? "emoji" : "no_blur" } : face
       )
     );
   };
@@ -54,16 +65,70 @@ const Register = () => {
     navigate("/generate");
   };
 
-  const handleNext = () => {
-    const faceData = faces.map((face) => ({
-        id: face.id,
-        name: face.name,
-    }));
+  const handleNext = async () => {
+    const videoFile = window.uploadedVideoFile;
+    if (!videoFile) {
+      alert("업로드된 동영상 파일이 없습니다. 첫 단계부터 다시 진행해 주세요.");
+      navigate("/upload");
+      return;
+    }
 
-    localStorage.setItem("faces", JSON.stringify(faceData));    
-    // 나중에 백엔드 연결 시 여기서 faces 저장 요청 보내면 됨
-    console.log("저장할 얼굴 데이터:", faces);
-    navigate("/generate");
+    try {
+      const formData = new FormData();
+
+      formData.append("file", videoFile);
+
+      const optionsArray = faces.map((face, index) => {
+        const uniqueFilename = `face_${face.id}_${face.file.name}`;
+        return {
+          person_id: `person_${index + 1}`,
+          action: face.action,
+          image_filename: uniqueFilename,
+          emoji_filename: face.action === "emoji" ? "cat.png" : null 
+        };
+      });
+      formData.append("options", JSON.stringify(optionsArray));
+
+      faces.forEach((face) => {
+        const uniqueFilename = `face_${face.id}_${face.file.name}`;
+        formData.append("person_images", face.file, uniqueFilename);
+      });
+
+      const hasEmojiAction = faces.some(f => f.action === "emoji");
+      if (hasEmojiAction) {
+        try {
+          const catResponse = await fetch("/assets/img/cat.png");
+          if (catResponse.ok) {
+            const catBlob = await catResponse.blob();
+            formData.append("emoji_images", catBlob, "cat.png");
+          }
+        } catch (err) {
+          console.error("이모지 파일 로드 실패:", err);
+        }
+      }
+
+      console.log("코랩 백엔드로 비식별화 연산 요청 송신 중...", optionsArray);
+
+      const response = await axios.post(`${BACKEND_BASE_URL}/api/blur`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      if (response.status === 200 || response.status === 201) {
+        localStorage.setItem("current_video_id", response.data.video_id);
+        
+        const faceData = faces.map((face) => ({
+          id: face.id,
+          name: face.name,
+        }));
+        localStorage.setItem("faces", JSON.stringify(faceData));
+
+        navigate("/generate");
+      }
+
+    } catch (error) {
+      console.error("백엔드 API 연동 에러:", error);
+      alert("서버 연동 중 오류가 발생했습니다. 코랩 서버 상태나 ngrok 주소를 다시 확인해 주세요!");
+    }
   };
 
   return (
@@ -105,6 +170,7 @@ const Register = () => {
               selected={index === 0}
               face={face}
               onNameChange={handleNameChange}
+              onActionToggle={handleActionToggle} 
               onDelete={handleDelete}
             />
           ))}
@@ -154,11 +220,13 @@ const Register = () => {
   );
 };
 
-const FaceCard = ({ title, selected, face, onNameChange, onDelete }) => {
+const FaceCard = ({ title, selected, face, onNameChange, onActionToggle, onDelete }) => {
   const [isToggleOn, setIsToggleOn] = useState(false);
 
   const handleToggle = () => {
-    setIsToggleOn(!isToggleOn);
+    const nextState = !isToggleOn;
+    setIsToggleOn(nextState);
+    onActionToggle(face.id, nextState);
   };
 
   return (
@@ -188,19 +256,12 @@ const FaceCard = ({ title, selected, face, onNameChange, onDelete }) => {
         <span>이모지</span>
 
         <div
-          className={`toggle-container ${
-            isToggleOn ? 'toggle--checked' : ''
-          }`}
+          className={`toggle-container ${isToggleOn ? 'toggle--checked' : ''}`}
           onClick={handleToggle}
         >
-          <div
-            className={`toggle-circle ${
-              isToggleOn ? 'toggle--checked' : ''
-            }`}
-          />
+          <div className={`toggle-circle ${isToggleOn ? 'toggle--checked' : ''}`} />
         </div>
       </div>
-
     </div>
   );
 };
