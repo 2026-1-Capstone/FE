@@ -1,4 +1,5 @@
-# FE
-npm i sass
+# saflog FE
 
-npm i react-router-dom
+|강신영|정지은|장수민|
+|---|---|---|
+|- 동영상 검수 <br> - 다운로드|- 동영상 업로드 <br> - 얼굴등록 <br> - 동영상 생성|API 연결|
